@@ -1,0 +1,38 @@
+#!/usr/bin/env perl 
+#===============================================================================
+#
+#         FILE: png2jpeg.pl
+#
+#        USAGE: ./png2jpeg.pl  
+#
+#  DESCRIPTION: Convert png images to jpeg, preserving metadata
+#
+#      OPTIONS: ---
+# REQUIREMENTS: ---
+#         BUGS: ---
+#        NOTES: ---
+#       AUTHOR: EA1A87
+# ORGANIZATION: 
+#      VERSION: 0.0.0
+#      CREATED: 22.05.2016 20:16:48
+#     REVISION: ---
+#===============================================================================
+
+use strict;
+use warnings;
+use utf8;
+use 5.020;
+use autodie;
+
+
+open (my $PNG, "<", $ARGV[0]);
+
+while (<$PNG>) {
+		chomp;
+		my $newname = $_;
+		$newname =~ s/\.png/\.jpg/;
+		`convert "$_" "$_.ppm"`;
+		`cjpeg -quality 95 -optimize -outfile "$newname" "$_.ppm"`;
+		unlink "$_.ppm";
+		unlink "$_";
+}
